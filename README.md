@@ -1,5 +1,9 @@
 # Annual Developer Goals
 
+## 2025
+
+[Goals](/2025/goals.md)
+
 ## 2024
 
 [Goals](/2024/goals.md)
