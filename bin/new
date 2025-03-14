@@ -1,0 +1,62 @@
+#!/usr/bin/env node
+
+const fs = require('node:fs'),
+  path = require('node:path'),
+  { Command } = require('commander'),
+  { version } = require('../package.json'),
+  { getRandomEmote } = require('../bin/utils/emoji');
+
+const TYPE_CHOICES = ['goals', 'reflections'];
+
+// instantiate new command
+const cmd = new Command();
+
+// basic info
+cmd
+  .name('new')
+  .description('Create a new template file (goals or reflections)')
+  .version(version);
+
+// add options
+cmd
+  .argument('<type>', 'Type of the template: goals | reflections')
+  .argument('[year]', 'Year for the template', String(new Date().getFullYear()))
+  .action(newAction);
+
+cmd.parse(process.argv);
+
+function newAction(type, year) {
+  // validate
+  if (!TYPE_CHOICES.includes(type)) {
+    console.error(`Invalid type. Choose from: ${TYPE_CHOICES.join(', ')}`);
+    process.exit(1);
+  }
+
+  // generate the file name
+  const fileName = `${type}.md`,
+    filePath = path.join(process.cwd(), year, fileName);
+
+  // format content
+  const emote = getRandomEmote();
+  let content = `# ${emote} ${year} Dev type\n`;
+  if (type === 'goals') content = content.replace('type', 'Goals');
+  if (type === 'reflections') content = content.replace('type', 'Reflections');
+
+  // check if the directory exists, if not create it
+  if (!fs.existsSync(path.join(process.cwd(), year))) {
+    fs.mkdirSync(path.join(process.cwd(), year));
+  }
+
+  // write to file in specified directory
+  fs.writeFile(filePath, content, (err) => {
+    if (err) {
+      console.error(`Error creating file: ${err.message}`);
+      process.exit(1);
+    }
+    console.log(`File ${year}/${fileName} created successfully.`);
+    console.log(`Remember to update the README.md!`);
+    process.exit(0);
+  });
+
+  // xx - add automatic entry in README.md -- currently that is a manual operation
+}

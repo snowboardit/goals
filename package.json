@@ -1,0 +1,20 @@
+{
+  "name": "goals",
+  "version": "1.0.0",
+  "description": "A central repo for developer goals",
+  "main": "bin/new",
+  "repository": {
+    "type": "git",
+    "url": "github.com/snowboardit/goals"
+  },
+  "keywords": [
+    "goals",
+    "reflections",
+    "achievements"
+  ],
+  "author": "Max Lareau <info@maxlareau.com> (https://maxlareau.com)",
+  "license": "MIT",
+  "devDependencies": {
+    "commander": "^13.1.0"
+  }
+}
